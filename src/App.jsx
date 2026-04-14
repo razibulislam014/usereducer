@@ -1,50 +1,13 @@
-import { useReducer } from "react";
 import AddTask from "./components/AddTask..jsx";
 import TaskList from "./components/TaskList.jsx";
-import { initialTasks } from "./data/tasks.js";
-import taskReducer from "./reducers/taskReducer.js";
+import TaskContextProvider from "./context/TaskContextProvider.jsx";
 
 export default function TaskApp() {
-  const [tasks, dispatch] = useReducer(taskReducer, initialTasks);
-
-  const getNextId = (data) => {
-    const maxId = data.reduce((prev, current) =>
-      prev && prev.id > current.id ? prev.id : current.id,
-    );
-    return maxId + 1;
-  };
-
-  const handleAddTask = (text) => {
-    dispatch({
-      type: "added",
-      text,
-      id: getNextId(tasks),
-    }); // Added
-  };
-
-  const handleChangeTask = (task) => {
-    dispatch({
-      type: "changed",
-      task,
-    });
-  };
-
-  const handleDeleteTask = (taskId) => {
-    dispatch({
-      type: "deleted",
-      id: taskId,
-    });
-  };
-
   return (
-    <>
+    <TaskContextProvider>
       <h1>Prague itinerary</h1>
-      <AddTask onAdd={handleAddTask} />
-      <TaskList
-        tasks={tasks}
-        onChangeTask={handleChangeTask}
-        onDeleteTask={handleDeleteTask}
-      />
-    </>
+      <AddTask />
+      <TaskList />
+    </TaskContextProvider>
   );
 }
